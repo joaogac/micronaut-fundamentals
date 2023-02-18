@@ -48,15 +48,15 @@ BeanIntrospection.getInstrospection()
 Environment priority:
 Default env. -> micronaut.environments -> MICRONAUT_ENVIRONMENTS -> Application Context Builder   
 
-Property Sources (from High to Low)   
+#### Property Sources (from High to Low)   
 Command line arguments   
-SPRING_APP_JSON    
-MICRONAUT_APP_JSON   
-Java System Properties   
-OS environment variables   
-micronaut.config.files   
-application-{environment}.{extension}   
-application.{extension}   
+* SPRING_APP_JSON    
+* MICRONAUT_APP_JSON   
+* Java System Properties   
+* OS environment variables   
+* micronaut.config.files   
+* application-{environment}.{extension}   
+* application.{extension}   
 
 {extension}= .yaml, .properties or .json   
 
@@ -73,14 +73,15 @@ Field
 Class
 ```
 
-How to pass an environment to Micronaut ? 
-Environment variables= MICRONAUT_ENVIRONMENTS=dev
+How to pass an environment to Micronaut ?    
+Environment variables= MICRONAUT_ENVIRONMENTS=dev    
 
-All letters in uppercase and all dots for underscores
-LIGHTS_DEFAULT_COLOR=red
+All letters in uppercase and all dots for underscores    
+LIGHTS_DEFAULT_COLOR=red    
 
 
-Passing configurations through Maps and Lists
+Passing configurations through Maps and Lists   
+```java
 @EachProperty(value = "updates")
 Class
 
@@ -92,28 +93,31 @@ Map<String, String> thresholds;
 
 @EachProperty(value = "updates.urls", list= true)
 Class
+```
 
-and those are combined with a @Factory class
+and those are combined with a `@Factory` class
+```java
 @Context
 @Factory
 Class {
 
-@EachBean(UpdatesSourceConfiguration.class)
-method
+    @EachBean(UpdatesSourceConfiguration.class)
+    method
 
 }
+```
 
-@Parameter in constructor
-Will inject the property key in the name field
-In case of map transformation.. we need to tell Micronaut which property will be the key for our map in the fields of our class
+`@Parameter` in constructor   
+Will inject the property key in the name field   
+In case of map transformation.. we need to tell Micronaut which property will be the key for our map in the fields of our class   
 
 
-Aspect Oriented Programming
-Programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns
+### Aspect Oriented Programming
+Programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns   
 
-Aspect is executed aside method calls
+Aspect is executed aside method calls   
 
-Around Advice
+#### Around Advice
 Ex.: Logs and statement everytime a method call is done.. execute some code before hand   
 
 ```java
@@ -135,6 +139,7 @@ Mark the methods you would like to intercept with the `@Log` annotation
 ### Introduction Advice
 Are placed in interfaces and abstract classes, which do not have a default implementation
 
+```java
 @Introduction
 @Bean
 @Documented
@@ -151,6 +156,7 @@ interface UpdatesControlCenter {
     @UpdatesClient
     public String getLatestVersion();
 }
+```
 
 
 ### Built-in Advices
@@ -291,86 +297,102 @@ dependencies {
 
 
 
-HTTP Clients
-Reactive clients (RxJava) - non blocking io calls .. do not impact the client waiting for a response
+### HTTP Clients
+Reactive clients (RxJava) - non blocking io calls .. do not impact the client waiting for a response    
 
-Low-level Client
+#### Low-level Client
+
+```java
 @Client("http://pluralsight.com")
 RxHttpClient client;
+```
 
-
-Declarative 
+#### Declarative Client
+```java
 @Client
 interface { 
 }
+```
 
-Uses the same annotations: @Get, @Post, @QueryValue and so on
+Uses the same annotations: `@Get`, `@Post`, `@QueryValue` and so on   
 
-RxJava Return Types
-Observable = single object
-Completable = maybe
-Flowable = list of objects, multiple objects ... open stream -> event -> ... -> event -> close stream
-Single = stream events.. open stream -> event -> close stream
+##### RxJava Return Types
+`Observable` = single object
+`Completable` = maybe
+`Flowable` = list of objects, multiple objects ... open stream -> event -> ... -> event -> close stream
+`Single` = stream events.. open stream -> event -> close stream
 
 
 Declarative clients must be an interface! 
 Requires a lot less code than low level client, much simpler
 
-Differences between Single != Flowable 
+Differences between `Single` != `Flowable` 
 
 
-@Retryable(attempts=3, delay=2s) - micronaut client will not immediately fail as it discover it cannot reach the server .. we'll retry the request with a couple of seconds between then 
+`@Retryable(attempts=3, delay=2s)` - micronaut client will not immediately fail as it discover it cannot reach the server .. we'll retry the request with a couple of seconds between then 
 
 The waiting time is exponential ! First 2s, after 4s, 16s and so on
 
-@CircuitBreaker- similar to the retryable annotation, with a couple of twists.. if it encounter too many erros coming from a client, it will decouple the circuit (stop making requests) for a specific duration (configurable) .. like 30s.. so it can continue retrying after that period
+`@CircuitBreaker`- similar to the retryable annotation, with a couple of twists.. if it encounter too many erros coming from a client, it will decouple the circuit (stop making requests) for a specific duration (configurable) .. like 30s.. so it can continue retrying after that period   
 
-Prevents overloaded requests 
+Prevents overloaded requests    
 
-It prevents the server to be flooded of 500 internal server erors.. since the circuit is off, it immediately returns an error to the client 
+It prevents the server to be flooded of 500 internal server erors.. since the circuit is off, it immediately returns an error to the client    
 
-@Fallback - provides a default behavior when our server is unreachable.. like getting the data I need from a cache
+`@Fallback` - provides a default behavior when our server is unreachable.. like getting the data I need from a cache
 
+```java
 @Fallback 
 class implements DeclarativeCalibrationClient {}
+```
  And returns some dummy results 
 
 
-Kafka
-Event-driven microservices
+### Kafka
+Event-driven microservices 
 
 Micronaut supports:
-Apache Kafka
-RabbitMQ
-Nats.io
+* Apache Kafka
+* RabbitMQ
+* Nats.io
 
 Kafka topics lives in Kafka brokers
 
-Kafka Producers
+#### Kafka Producers
 
+```java
 @KafkaClient
 interface { 
+
     @Topic("${kafka.topic.notifications}")
     Single<> publishNotification(@KafkaKey Id id, Notification notification);
+
 }
+```
 
 Kafka Events are composed of
-Key
-Value
-Header(s)
-Timestamp
+* Key
+* Value
+* Header(s)
+* Timestamp
 
-docker-compose.yaml - deploy a Kafka cluster in our local machine
+`docker-compose.yaml` - deploy a Kafka cluster in our local machine
+
+```docker
 docker compose up -d
+```
 
 
-Add in build.gradle the Kafka dependency
+Add in `build.gradle` the Kafka dependency
+```gradle
 implementation("io.micronaut.kafka:micronaut-kafka")
+```
 
-application.yml - Add the kafka bootstrap property
+`application.yml` - Add the kafka bootstrap property
 
-Any properties start with "kafka.producers.default.{property} will be provided to the embedded producer 
+Any properties start with `"kafka.producers.default.{property}"` will be provided to the **embedded producer** 
 
+```yaml
 kafka:
    bootstrap:
        servers: localhost:9082
@@ -378,10 +400,12 @@ kafka:
        notifications: <<topic_name>>
    producers:
        retries: 5
+```       
 
 
-Kafka Consumers
+#### Kafka Consumers
 
+```java
 @KafkaListener(groupId = "news.listener")
 public class NewsListener {
 
@@ -389,10 +413,11 @@ public class NewsListener {
    public void receive(@KafkaKey Id id, News news) {
    }
 }
+```
 
 groupId -> make sure each Kafka Listener has a unique id
 
-Streaming Applications
+### Streaming Applications
 Takes 1 event as input, and produces one or more events as outputs
 Consuming event in one topic, producing to another topic
 
@@ -405,12 +430,15 @@ Use cases:
 - aggregate
 - join
 
-build.gradle -> Add a new dependency:
+`build.gradle` -> Add a new dependency:
+```gradle
 dependencies {
     implementation("io.micronaut.kafka:micronaut-kafka")
     implementation("io.micronaut.kafka:micronaut-kafka-streams")
 }
+```
 
+```java
 @Factory
 public class NewsFilterStream {
     @Property( name= "kafka.topic.news" )
@@ -428,10 +456,12 @@ public class NewsFilterStream {
          return source;
     }
 }
+```
 
-Testing Micronaut Applications
+### Testing Micronaut Applications
 
-build.gradle -> Add necessary testing unit dependencies
+`build.gradle` -> Add necessary testing unit dependencies
+```gradle
 dependencies {
    ...
    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
@@ -439,7 +469,9 @@ dependencies {
    testImplementation("io.micronaut.test:micronaut-test-junit5:2.3.7")
    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
 }
+```
 
+```java
 @MicronautTest
 public class RecipesControllerTest {
 
@@ -465,18 +497,23 @@ public class RecipesControllerTest {
          assertEquals( HttpStatus.BAD_REQUEST, exception.getStatus() );
     }
 }
+```
 
 
 
-Mocking Services
-build.gradle -> Add mockito dependency
+#### Mocking Services
+`build.gradle` -> Add **mockito** dependency
+
+```gradle
 dependencies {
    ...
    testImplementation("org.mockito:mockito-all:1.10.19")
 }
+```
 
-Mockito is a testing library that allow us to mock the behaviour of our beans
+**Mockito** is a testing library that allow us to mock the behaviour of our beans
 
+```java
 @MicronautTest
 public class CalibrationsControllerTest {
 
@@ -485,78 +522,86 @@ public class CalibrationsControllerTest {
         return Mockito.mock( DeclarativeCalibrationsClient.class );
     }
 }
+```
 
-Kafka Unit Testing
-build.gradle -> Add test containers dependency
+#### Kafka Unit Testing
+`build.gradle` -> Add test *containers* dependency
+```gradle
 dependencies {
     ...
     testImplementation("org.textcontainers:kafka:1.15.3")
 }
+```
  
 
-Cloud-native features
+### Cloud-native features
 
-Distributed Configuration
-Instead of storing configuration files, we store it in a distributed configuration store
-The store is usually deployed in a high-availability format, so it provides resiliency
-All our application requires is the connection URL
-Ideal por properties/secrets, this way our app doesn't need to be repackaged any time configurations changes
+#### Distributed Configuration
+Instead of storing configuration files, we store it in a distributed configuration store   
+The store is usually deployed in a high-availability format, so it provides resiliency    
+All our application requires is the connection URL    
+Ideal por properties/secrets, this way our app doesn't need to be repackaged any time configurations changes    
 
 Supported Distributed Configuration:
-- HashiCorp Consul
-- Spring Cloud Config
-- AWS Parameter Store
-- HashiCorp Vault
-- Oracle Cloud Vault
+* HashiCorp Consul
+* Spring Cloud Config
+* AWS Parameter Store
+* HashiCorp Vault
+* Oracle Cloud Vault
 
-Service Discovery
+#### Service Discovery
 A Service Registry will know addresses of all deployed applications
 
-- HashiCorp Consult
-- Eureka
-- Kubernetes
-- AWS Route 53
-- Manual Service Discovery
+* HashiCorp Consult
+* Eureka
+* Kubernetes
+* AWS Route 53
+* Manual Service Discovery
 
-Client-side Load Balancing
-Let the client applications do the load balancing by themselves
-The client decides which applications connect to
+#### Client-side Load Balancing
+Let the client applications do the load balancing by themselves   
+The client decides which applications connect to   
 
-- Netflix Ribbon
+* Netflix Ribbon
 
 
 Distributed Tracing
 Serverless Functions
-- AWS Lambda
-- Google Cloud Function
-- Google Cloud Run
-- Azure Function
+* AWS Lambda
+* Google Cloud Function
+* Google Cloud Run
+* Azure Function
 
+```bash
 mn create-function-app mn-text-processor --features google-cloud-function
+```
 
 Packaging can be made by gradle, zipping the code base and all required dependencies in a single jar
+
+```bash
 gradle clean shadowJar
 cd build/libs
+```
 
 
-Micronaut Security
+### Micronaut Security
 Authentication - supported mechanisms:
-- Basic authentication
-- Session authentication
-- JSON web token (JWT)
-- LDAP
-- custom
+* Basic authentication
+* Session authentication
+* JSON web token (JWT)
+* LDAP
+* custom
 
-JWT
-Signature Validation
-Token Generation
-Encryption
-Claims Generations
-Claims Validation
+#### JWT
+* Signature Validation
+* Token Generation
+* Encryption
+* Claims Generations
+* Claims Validation
 
 OAuth 2.0 and OpenID Connect - providers supported:
-- Okta
-- Auth0
-- AWS Cognito
-- Keycloak
-- Google
+* Okta
+* Auth0
+* AWS Cognito
+* Keycloak
+* Google
