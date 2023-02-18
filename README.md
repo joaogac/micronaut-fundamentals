@@ -350,11 +350,10 @@ Uses the same annotations: `@Get`, `@Post`, `@QueryValue` and so on
 graph TD;
     A(open stream)-->B(event);
     B(event)-->|...|C(event);
-    C(event)-->|...|D(close stream);
+    C(event)-->D(close stream);
 ```
 
-open stream -> event -> ... -> event -> close stream
-`Single` = stream events.. open stream -> event -> close stream
+`Single` = single object/events
 
 
 Declarative clients must be an interface! 
