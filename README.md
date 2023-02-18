@@ -9,18 +9,32 @@ Easter egg: micronaut-banner.txt in resources folder
 ASCII Text art generator 
 
 ### Micronaut CLI
-mn create-app <<app_name>>   
 
+```bash
+mn create-app <<app_name>>
+```
+
+### Annotations
 
 `@Inject` - Prefered way constructor injection + makes the fields immutable    
-&nbsp;&nbsp;>BeanContext.run   
-&nbsp;&nbsp;>ApplicationContext.run    
+   * BeanContext.run   
+   * ApplicationContext.run   
+   
 `@Named`   
 `@Qualifier`   
-`@Primary` `@Second`   
-`@Replaces` - Bean replacement thirsty party libraries   
+`@Primary`   
+`@Second`    
+`@Replaces` - Bean replacement 3rd-party libraries   
 
-Bean lifecycle: instantiation - `@PostConstruct` - `@Inject` - `@PreDestroy` - `destroyed`   
+### Bean lifecycle: instantiation
+
+```mermaid
+graph TD;
+    A("Instantiation (constructor)")-->B("@PostConstruct");
+    B("@PostConstruct")-->C("@Inject");
+    C("@Inject")-->D("@PreDestroy");
+    D("@PreDestroy")-->E("destroyed");
+```
 
 
 ### Bean scopes
@@ -32,21 +46,30 @@ Bean lifecycle: instantiation - `@PostConstruct` - `@Inject` - `@PreDestroy` - `
 `@RequestScope`   
 `@Refreshable` - we can refresh the state of bean  using the refresh endpoint   
 
-`@Factory` - when using 3rt party libraries we want to use their classes as beans   
+`@Factory` - when using 3rd-party libraries we want to use their classes as beans   
 `@Bean` - a method declared inside the factory class which returns a new object from 3rt party library   
 
 
 ### Bean introspection
-Getting reflection types fields in AOT compilers
+Getting reflection types fields in AOT (_Ahead of Time_) compilers
 Not every class is available for instrospection 
 
-`@Instrospected`
+```java
+@Instrospected
 BeanIntrospection.getInstrospection()
+```
 
 
 ### Configuration
-Environment priority:
-Default env. -> micronaut.environments -> MICRONAUT_ENVIRONMENTS -> Application Context Builder   
+Environment priorities, from top (**_highest_**) to down (**_lowest_**) ones:
+
+```mermaid
+graph TD;
+    A(Application Context Builder)-->B(MICRONAUT_ENVIRONMENTS);
+    B(MICRONAUT_ENVIRONMENTS)-->C(micronaut.environments);
+    C(micronaut.environments)-->D(Default env.);
+```
+
 
 #### Property Sources (from High to Low)   
 Command line arguments   
