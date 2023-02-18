@@ -6,61 +6,63 @@ https://docs.micronaut.io/index.html \
 https://docs.micronaut.io/latest/guide/ 
 
 Easter egg: micronaut-banner.txt in resources folder
-ASCII Text art generator
+ASCII Text art generator 
 
-Micronaut CLI
-mn create-app <<app_name>>
-
-
-@Inject - Prefered way constructor injection
-makes the fields immutable 
-BeanContext.run
-ApplicationContext.run
-@Named
-@Qualifier
-@Primary @Second
-@Replaces - Bean replacement thirsty party libraries
-Bean lifecycle: instantiate - @PostConstruct - @Inject - @PreDestroy - destroyed
+### Micronaut CLI
+mn create-app <<app_name>>   
 
 
-Bean scopes
-@Singleton - lazy initialization, only when a method call is done 
-@Context - one instance per context, but eager initialization.. during startup
-@Prototype - will instantiate a new bean everytime it gets injected 
-@ThreadLocal
-@Infrastructure
-@RequestScope
-@Refreshable - we can refresh the state of bean  using the refresh endpoint
+`@Inject` - Prefered way constructor injection + makes the fields immutable    
+&nbsp;&nbsp;>BeanContext.run   
+&nbsp;&nbsp;>ApplicationContext.run    
+`@Named`   
+`@Qualifier`   
+`@Primary` `@Second`   
+`@Replaces` - Bean replacement thirsty party libraries   
 
-@Factory - when using 3rt party libraries we want to use their classes as beans
-@Bean - a method declared inside the factory class which returns a new object from 3rt party library
+Bean lifecycle: instantiation - `@PostConstruct` - `@Inject` - `@PreDestroy` - `destroyed`   
 
 
-Bean introspection
+### Bean scopes
+`@Singleton` - lazy initialization, only when a method call is done   
+`@Context` - one instance per context, but eager initialization.. during startup  
+`@Prototype` - will instantiate a new bean everytime it gets injected   
+`@ThreadLocal`   
+`@Infrastructure`   
+`@RequestScope`   
+`@Refreshable` - we can refresh the state of bean  using the refresh endpoint   
+
+`@Factory` - when using 3rt party libraries we want to use their classes as beans   
+`@Bean` - a method declared inside the factory class which returns a new object from 3rt party library   
+
+
+### Bean introspection
 Getting reflection types fields in AOT compilers
 Not every class is available for instrospection 
-@Instrospected
+
+`@Instrospected`
 BeanIntrospection.getInstrospection()
 
 
-Configuration
+### Configuration
 Environment priority:
-Default env. -> micronaut.environments -> MICRONAUT_ENVIRONMENTS -> Application Context Builder
+Default env. -> micronaut.environments -> MICRONAUT_ENVIRONMENTS -> Application Context Builder   
 
-Property Sources (from High to Low)
-Command line arguments
-SPRING_APP_JSON
-MICRONAUT_APP_JSON
-Java System Properties
-OS environment variables
-micronaut.config.files
-application-{environment}.{extension}
-application.{extension} 
+Property Sources (from High to Low)   
+Command line arguments   
+SPRING_APP_JSON    
+MICRONAUT_APP_JSON   
+Java System Properties   
+OS environment variables   
+micronaut.config.files   
+application-{environment}.{extension}   
+application.{extension}   
 
-{extension}= .yaml, .properties or .json
+{extension}= .yaml, .properties or .json   
 
 ENVIRONMENT VAR -> good practice for variables who change frequently (like feature flags) which doesn't need the app to be repackaged
 
+```java
 @Value("{lights.default.color}")
 Field 
 
@@ -69,6 +71,7 @@ Field
 
 @ConfigurationProperties("lights.default")
 Class
+```
 
 How to pass an environment to Micronaut ? 
 Environment variables= MICRONAUT_ENVIRONMENTS=dev
@@ -111,8 +114,9 @@ Programming paradigm that aims to increase modularity by allowing the separation
 Aspect is executed aside method calls
 
 Around Advice
-Ex.: Logs and statement everytime a method call is done.. execute some code before hand
+Ex.: Logs and statement everytime a method call is done.. execute some code before hand   
 
+```java
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
@@ -123,11 +127,12 @@ public @interface Log {}
 @InterceptorBean(Log.class)
 public class LogInterceptor implements MethodInterceptor<Object, Object> {
 }
+```
 
-Mark the methods you would like to intercept with the @Log annotation
+Mark the methods you would like to intercept with the `@Log` annotation
 
 
-Introduction Advice
+### Introduction Advice
 Are placed in interfaces and abstract classes, which do not have a default implementation
 
 @Introduction
@@ -148,64 +153,72 @@ interface UpdatesControlCenter {
 }
 
 
-Built-in Advices
-@EventListener - acts on application startup event, file changes, refresh event
-@Valid
-@NotNull
-@Min
-@Max
-@Cacheable
-@CachePut
-@CacheInvalidate
-@Retryable
-@CircuitBreaker
-@Scheduled - tasks to be executed in a certain time/period.. runs tasks in sequence. So if tasks take longer than the fixedRate they will be executed right away.. That's when fixedDelay takes place
-    fixedRate = 10m
-    fixedDelay = 1h
-    cron = 0 8 * * *
-    initialDelay = 1m
+### Built-in Advices
+`@EventListener` - acts on application startup event, file changes, refresh event   
+`@Valid`   
+`@NotNull`   
+`@Min`   
+`@Max`   
+`@Cacheable`    
+`@CachePut`   
+`@CacheInvalidate`   
+`@Retryable`    
+`@CircuitBreaker`    
+`@Scheduled` - tasks to be executed in a certain time/period.. runs tasks in sequence. So if tasks take longer than the fixedRate they will be executed right away.. That's when fixedDelay takes place   
+    * fixedRate = 10m   
+    * fixedDelay = 1h   
+    * cron = 0 8 * * *    
+    * initialDelay = 1m    
 
 
-HTTP Services
-@Controller
-@Get
-@Post
-@Put
-@Patch
-@Delete
-@Head
-@Options
-@Trace
+### HTTP Services
+`@Controller`    
+`@Get`    
+`@Post`    
+`@Put`    
+`@Patch`    
+`@Delete`    
+`@Head`    
+`@Options`   
+`@Trace`   
 
-@QueryValue
-@CookieValue
-@Header
-@PathVariable
-@RequestAttribute
+`@QueryValue`   
+`@CookieValue`    
+`@Header`    
+`@PathVariable`    
+`@RequestAttribute`    
 
 Micronaut embeds Netty web server
 
+```java
 @Get
 public String getRecipes(@QueryValue Optional<String> query) {}
 
 @Post
 public Recipe createRecipe(@Body Recipe recipe) {}
-
-Error Handling
-Local Error Handling
-@Error -> method in your class
+```
+    
+### Error Handling
+#### Local Error Handling
+`@Error` -> method in your class    
+    
+```java
 public HttpResponse<JsonError> jsonError(HttpRequest request, JsonParseException e) {
    return HttpResponse.badRequest(.new JsonError( e.getMessage() ) );
 }
+```
 
-Global Error Handling
+#### Global Error Handling
+```java    
 @Error( global = true, status = HttpStatus.NOT_FOUND )
 public HttpResponse<JsonError> notFound( HttpRequest request ){
    return HttpResponse.notFound().body( error );
 }
+```
 
-Exception Handler -> listen to any specific type of error thrown at the app level (custom exceptions)
+#### Exception Handler -> listen to any specific type of error thrown at the app level (custom exceptions)
 
+```java
 public class InvalidTemperatureException extends RuntimeException{}
 
 public class ErrorMessage {} // DTO
@@ -216,11 +229,13 @@ public class InvalidTemperatureExceptionHandler implements ExceptionHandler< Inv
        return HttpResponse.badRequest( errorMessage );
     }
 }
+```
 
-API Versioning
+### API Versioning
 
-Micronaut versioning is not enabled by default.. So we need to add the versioning mechanism at application.yml
+Micronaut versioning is not enabled by default.. So we need to add the versioning mechanism at `application.yml`   
 
+```yaml    
 router:
    versioning:
        enabled: true
@@ -232,7 +247,9 @@ router:
            names: 
                - 'X-API-VERSION'
                - 'Accept-Version'
+```    
 
+```java    
 @Version("1")
 @Get("/sensor/status")
 public String getStatus1() {}
@@ -240,34 +257,37 @@ public String getStatus1() {}
 @Version("2")
 @Get("/sensor/status")
 public String getStatus2() {}
-
+```
+    
 Callign via insomnia
-GET -> http://localhost:8080/sensor/status?v=1
-             http://localhost:8080/sensor/status?v=2
+GET -> http://localhost:8080/sensor/status?v=1    
+       http://localhost:8080/sensor/status?v=2    
 
 
 HTTP Header
-GET -> http://localhost:8080/sensor/status
-     X-API-VERSION = 1
+GET -> http://localhost:8080/sensor/status    
+     X-API-VERSION = 1    
 
 
-Management Endpoints
-/beans
-/health
-/info
-/loggers
-/metrics
-/refresh
-/routes
-/env
-/threaddump
-/caches
-/stop
+### Management Endpoints
+* /beans
+* /health
+* /info
+* /loggers
+* /metrics
+* /refresh
+* /routes
+* /env
+* /threaddump
+* /caches
+* /stop
 
-Need to add an additional dependency to the build.gradle
+Need to add an additional dependency to the `build.gradle`
+```gradle
 dependencies {
     implementation("io.micronaut:micronaut-management")
 }
+```    
 
 
 
