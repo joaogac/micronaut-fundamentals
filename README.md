@@ -454,6 +454,12 @@ groupId -> make sure each Kafka Listener has a unique id
 Takes 1 event as input, and produces one or more events as outputs
 Consuming event in one topic, producing to another topic
 
+```mermaid
+graph TD;
+    A("&quot;news&quot; topic")-->B("streamingFilter");
+    B("streamingFilter")-->C("&quot;filtered-news&quot; topic");
+```
+
 "news" topic -> streamingFilter -> "filtered-news" topic
 
 Use cases:
