@@ -17,8 +17,11 @@ mn create-app <<app_name>>
 ### Annotations
 
 `@Inject` - Prefered way constructor injection + makes the fields immutable    
-   * BeanContext.run   
-   * ApplicationContext.run   
+
+   ```java
+   - BeanContext.run()   
+   - ApplicationContext.run()
+   ```
    
 `@Named`   
 `@Qualifier`   
