@@ -194,10 +194,11 @@ interface UpdatesControlCenter {
 `@Retryable`    
 `@CircuitBreaker`    
 `@Scheduled` - tasks to be executed in a certain time/period.. runs tasks in sequence. So if tasks take longer than the fixedRate they will be executed right away.. That's when fixedDelay takes place   
-    * fixedRate = 10m   
-    * fixedDelay = 1h   
-    * cron = 0 8 * * *    
-    * initialDelay = 1m    
+
+    - fixedRate = 10m   
+    - fixedDelay = 1h   
+    - cron = 0 8 * * *    
+    - initialDelay = 1m    
 
 
 ### HTTP Services
