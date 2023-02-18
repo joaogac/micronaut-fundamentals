@@ -67,7 +67,7 @@ Environment priorities, from top (**_highest_**) to down (**_lowest_**) ones:
 graph TD;
     A(Application Context Builder)-->B(MICRONAUT_ENVIRONMENTS);
     B(MICRONAUT_ENVIRONMENTS)-->C(micronaut.environments);
-    C(micronaut.environments)-->D(Default env.);
+    C(micronaut.environments)-->D(Default environment);
 ```
 
 
@@ -343,7 +343,16 @@ Uses the same annotations: `@Get`, `@Post`, `@QueryValue` and so on
 ##### RxJava Return Types
 `Observable` = single object
 `Completable` = maybe
-`Flowable` = list of objects, multiple objects ... open stream -> event -> ... -> event -> close stream
+`Flowable` = list of objects, multiple objects ...   
+
+
+```mermaid
+graph TD;
+    A(open stream)-->B(event);
+    B(event)-->|...|C(close stream);
+```
+
+open stream -> event -> ... -> event -> close stream
 `Single` = stream events.. open stream -> event -> close stream
 
 
