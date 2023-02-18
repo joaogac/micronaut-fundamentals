@@ -349,7 +349,8 @@ Uses the same annotations: `@Get`, `@Post`, `@QueryValue` and so on
 ```mermaid
 graph TD;
     A(open stream)-->B(event);
-    B(event)-->|...|C(close stream);
+    B(event)-->|...|C(event);
+    C(event)-->|...|C(close stream);
 ```
 
 open stream -> event -> ... -> event -> close stream
