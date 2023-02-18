@@ -460,7 +460,6 @@ graph TD;
     B("streamingFilter")-->C("&quot;filtered-news&quot; topic");
 ```
 
-"news" topic -> streamingFilter -> "filtered-news" topic
 
 Use cases:
 - filter
