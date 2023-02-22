@@ -8,6 +8,46 @@ https://docs.micronaut.io/latest/guide/
 Easter egg: micronaut-banner.txt in resources folder
 ASCII Text art generator 
 
+# Table of contents
+
+- [Micronaut CLI](#micronaut-cli)
+- [Annotations](#annotations)
+- [Bean lifecycle](#bean-lifecycle)
+- [Bean scopes](#bean-scopes)
+- [Bean introspection](#bean-introspection)
+- [Configuration](#configuration)
+  - [Property Sources](#property-sources)
+- [Aspect Oriented Programming](#aspect-oriented-programming)
+  - [Around Advice](#around-advice)
+  - [Introduction Advice](#introduction-advice)
+  - [Built-in Advices](#built-in-advices)
+- [HTTP Services](#http-services)
+- [Error Handling](#error-handling)
+  - [Local Error Handling](#local-error-handling)
+  - [Global Error Handling](#global-error-handling)
+  - [Exception Handler](#exception-handler)
+- [API Versioning](#api-versioning)
+- [Management Endpoints](#management-endpoints)
+- [HTTP Clients](#http-clients)
+  - [Low-level Client](#low-level-client)
+  - [Declarative Client](#declarative-client)
+  - [RxJava Return Types](#rxjava-return-types)
+- [Kafka](#kafka)
+  - [Kafka Producers](#kafka-producers)
+  - [Kafka Consumers](#kafka-consumers)
+- [Streaming Applications](#streaming-applications)
+- [Testing Micronaut Applications](#testing-micronaut-applications)
+  - [Mocking Services](#mocking-services)
+  - [Kafka Unit Testing](#kafka-unit-testing)
+- [Cloud-native features](#cloud-native-features)
+  - [Distributed Configuration](#distributed-configuration)
+  - [Service Discovery](#service-discovery)
+  - [Client-side Load Balancing](#client-side-load-balancing)
+- [Micronaut Security](#micronaut-security)
+  - [JWT](#jwt)
+
+
+
 ### Micronaut CLI
 
 ```bash
