@@ -29,7 +29,7 @@ mn create-app <<app_name>>
 `@Second`    
 `@Replaces` - Bean replacement 3rd-party libraries   
 
-### Bean lifecycle: instantiation
+### Bean lifecycle
 
 ```mermaid
 graph TD;
@@ -74,8 +74,9 @@ graph TD;
 ```
 
 
-#### Property Sources (from High to Low)   
-Command line arguments   
+#### Property Sources    
+(from High to Low)   
+* Command line arguments   
 * SPRING_APP_JSON    
 * MICRONAUT_APP_JSON   
 * Java System Properties   
@@ -162,7 +163,7 @@ public class LogInterceptor implements MethodInterceptor<Object, Object> {
 Mark the methods you would like to intercept with the `@Log` annotation
 
 
-### Introduction Advice
+#### Introduction Advice
 Are placed in interfaces and abstract classes, which do not have a default implementation
 
 ```java
@@ -185,7 +186,7 @@ interface UpdatesControlCenter {
 ```
 
 
-### Built-in Advices
+#### Built-in Advices
 `@EventListener` - acts on application startup event, file changes, refresh event   
 `@Valid`   
 `@NotNull`   
@@ -249,7 +250,8 @@ public HttpResponse<JsonError> notFound( HttpRequest request ){
 }
 ```
 
-#### Exception Handler -> listen to any specific type of error thrown at the app level (custom exceptions)
+#### Exception Handler    
+Listen to any specific type of error thrown at the app level (custom exceptions)    
 
 ```java
 public class InvalidTemperatureException extends RuntimeException{}
@@ -343,7 +345,7 @@ interface {
 
 Uses the same annotations: `@Get`, `@Post`, `@QueryValue` and so on   
 
-##### RxJava Return Types
+#### RxJava Return Types
 `Observable` = single object
 `Completable` = maybe
 `Flowable` = list of objects, multiple objects ...   
